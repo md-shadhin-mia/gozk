@@ -11,9 +11,9 @@ import (
 // I'm too lazy to work to this project
 
 const (
-	testZkHost   = "192.168.100.201"
+	testZkHost   = "192.168.0.133"
 	testZkPort   = 4370
-	testTimezone = "Asia/Ho_Chi_Minh"
+	testTimezone = "Asia/Dhaka"
 )
 
 func TestSocketConnect(t *testing.T) {
@@ -52,4 +52,14 @@ func BenchmarkSocketGetAttendances(b *testing.B) {
 		_, err := socket.GetAllScannedEvents()
 		require.NoError(b, err)
 	}
+}
+
+func TestSocketGetAttendance(t *testing.T) {
+	socket := NewZK("", testZkHost, testZkPort, 0, testTimezone)
+	require.NoError(t, socket.Connect())
+	defer socket.Disconnect()
+
+	attendances, err := socket.GetAllScannedEvents()
+	require.NoError(t, err)
+	t.Log("number of attendances", len(attendances))
 }
